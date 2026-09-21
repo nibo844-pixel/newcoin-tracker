@@ -1,0 +1,31 @@
+services:
+  - type: worker
+    name: newcoin-tracker
+    runtime: docker
+    plan: free
+    dockerCommand: python3 tracker.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: ALERT_CHAT_ID
+        sync: false
+      - key: CHECK_INTERVAL
+        value: 300
+      - key: REQUIRE_TELEGRAM
+        value: 1
+      - key: REQUIRE_X
+        value: 1
+  - type: worker
+    name: newcoin-bot
+    runtime: docker
+    plan: free
+    dockerCommand: python3 bot.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+  - type: web
+    name: newcoin-health
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    dockerCommand: python3 server.py
